@@ -42,6 +42,7 @@ export default function AboutUsSection() {
     "/images (1).webp",
     "/oss_logo.webp",
     "/هيئة_تنمية_صناعة_تكنولوجيا_المعلومات_(مصر).webp",
+    "/duns-registered.webp",
   ];
 
   return (
