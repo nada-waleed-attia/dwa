@@ -2,22 +2,23 @@
 import { useEffect, useState, ReactNode } from "react";
 import Image from "next/image";
 import styles from "./MultimediaSection.module.css";
-import {
-  FaMagic,
-  FaLanguage,
-  FaMobileAlt,
-  FaHeadphones,
-  FaChartBar,
-  FaMicrophone,
-  FaVideo,
-  FaBookOpen,
-  FaMoon,
-  FaFileVideo,
-  FaBezierCurve,
-  FaBullhorn,
-  FaMusic,
-  FaVolumeUp,
-} from "react-icons/fa";
+import dynamic from "next/dynamic";
+
+// Lazy load icons - only load when section is visible
+const FaMagic = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaMagic })), { ssr: false });
+const FaLanguage = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaLanguage })), { ssr: false });
+const FaMobileAlt = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaMobileAlt })), { ssr: false });
+const FaHeadphones = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaHeadphones })), { ssr: false });
+const FaChartBar = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaChartBar })), { ssr: false });
+const FaMicrophone = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaMicrophone })), { ssr: false });
+const FaVideo = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaVideo })), { ssr: false });
+const FaBookOpen = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaBookOpen })), { ssr: false });
+const FaMoon = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaMoon })), { ssr: false });
+const FaFileVideo = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaFileVideo })), { ssr: false });
+const FaBezierCurve = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaBezierCurve })), { ssr: false });
+const FaBullhorn = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaBullhorn })), { ssr: false });
+const FaMusic = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaMusic })), { ssr: false });
+const FaVolumeUp = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaVolumeUp })), { ssr: false });
 
 type Playlist = {
   id: string;

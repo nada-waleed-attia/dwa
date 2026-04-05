@@ -1,7 +1,15 @@
 "use client";
 import { useState } from "react";
 import styles from "./DwamStoreSection.module.css";
-import { FaShoppingBag, FaBook, FaArrowLeft, FaStar, FaFire, FaTags } from "react-icons/fa";
+import dynamic from "next/dynamic";
+
+// Lazy load icons
+const FaShoppingBag = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaShoppingBag })), { ssr: false });
+const FaBook = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaBook })), { ssr: false });
+const FaArrowLeft = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaArrowLeft })), { ssr: false });
+const FaStar = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaStar })), { ssr: false });
+const FaFire = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaFire })), { ssr: false });
+const FaTags = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaTags })), { ssr: false });
 
 export default function DwamStoreSection() {
   const [hoveredSide, setHoveredSide] = useState<string | null>(null);

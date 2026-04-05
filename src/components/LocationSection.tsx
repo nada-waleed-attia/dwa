@@ -1,5 +1,11 @@
 import styles from "./LocationSection.module.css";
-import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from "react-icons/fa";
+import dynamic from "next/dynamic";
+
+// Lazy load icons
+const FaMapMarkerAlt = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaMapMarkerAlt })), { ssr: false });
+const FaPhone = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaPhone })), { ssr: false });
+const FaEnvelope = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaEnvelope })), { ssr: false });
+const FaClock = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaClock })), { ssr: false });
 
 export default function LocationSection() {
   const address = "جمهورية مصر العربية - محافظة الإسماعيلية – حي الزهور – المنطقة التاسعة ب – عمارة 4 مدخل أ";

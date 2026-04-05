@@ -1,7 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "./TrainingCoursesSection.module.css";
-import { FaGraduationCap, FaCertificate, FaUsers, FaClock, FaChartLine, FaLaptopCode, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import dynamic from "next/dynamic";
+
+// Lazy load icons
+const FaGraduationCap = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaGraduationCap })), { ssr: false });
+const FaCertificate = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaCertificate })), { ssr: false });
+const FaUsers = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaUsers })), { ssr: false });
+const FaClock = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaClock })), { ssr: false });
+const FaChartLine = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaChartLine })), { ssr: false });
+const FaLaptopCode = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaLaptopCode })), { ssr: false });
+const FaArrowLeft = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaArrowLeft })), { ssr: false });
+const FaArrowRight = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaArrowRight })), { ssr: false });
 
 export default function TrainingCoursesSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
