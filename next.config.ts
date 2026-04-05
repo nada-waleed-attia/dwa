@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: true,
   
+  // Disable caching in development for instant updates
+  ...(process.env.NODE_ENV === 'development' && {
+    onDemandEntries: {
+      maxInactiveAge: 25 * 1000,
+      pagesBufferLength: 2,
+    },
+  }),
+  
   images: {
     formats: ['image/avif', 'image/webp'], // AVIF first (better compression)
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -63,7 +71,10 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            // No cache in development, cache in production
+            value: process.env.NODE_ENV === 'development' 
+              ? 'no-cache, no-store, must-revalidate'
+              : 'public, max-age=31536000, immutable',
           },
         ],
       },

@@ -14,12 +14,7 @@ interface HeroProps {
 export default function Hero({ title = "للبرمجيات والأعمال التقنية" }: HeroProps) {
   const heroSceneUrl = "https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode";
   
-  // ========================================
-  // 🎮 للتحكم في الروبوت: غيري القيمة هنا
-  // true = الروبوت يشتغل ✅
-  // false = الروبوت يتوقف ❌
-  // ========================================
-  const SHOW_ROBOT = true;
+  const SHOW_ROBOT = false;
   
   const leftServices = [
     { icon: "fas fa-laptop-code", label: "حــلــول بــرمــجــيـــة", href: "#solutions" },
@@ -52,7 +47,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
       />
       {/* Spline Robot 3D - يظهر فقط لو SHOW_ROBOT = true */}
       {SHOW_ROBOT && (
-        <div className={styles.heroSpline} aria-hidden="true">
+        <div className={styles.heroSpline} aria-hidden="false">
           <SplineScene scene={heroSceneUrl} />
         </div>
       )}

@@ -949,34 +949,62 @@
   font-weight: 600;
   z-index: 5;
 }
-/* Page Navigation */
+/* Page Navigation - Split into Right and Left */
+.pageNavigationRight {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 10px 15px;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+.pageNavigationLeft {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 6px 10px;
+  border-radius: 10px;
+  z-index: 10;
+}
+
 .pageNavigation {
   position: absolute;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 20px;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 20px;
-  background: rgba(0, 0, 0, 0.8);
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.85);
   padding: 12px 20px;
-  border-radius: 30px;
+  border-radius: 16px;
   z-index: 10;
+  max-width: 90%;
+  flex-wrap: wrap;
 }
 
 .pageBtn {
   background: linear-gradient(135deg, #ff8400 0%, #ff6a00 100%);
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 10px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .pageBtn:hover:not(:disabled) {
@@ -991,18 +1019,23 @@
 
 .pageInfo {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   color: white;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
-  min-width: 150px;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .imageRange {
-  font-size: 12px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 4px;
+}
+
+.imageCounter {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 @media (max-width: 768px) {

@@ -10,7 +10,7 @@ import Image, { ImageProps } from "next/image";
  * مفيد للـ galleries والصور الكثيرة
  */
 
-interface LazyImageProps extends Omit<ImageProps, 'onLoad'> {
+interface LazyImageProps extends Omit<ImageProps, 'onLoad' | 'placeholder'> {
   rootMargin?: string;
   placeholder?: React.ReactNode;
 }

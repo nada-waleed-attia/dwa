@@ -98,6 +98,9 @@ export default function GraphicDesignSection() {
   // Pagination for images - يحمل 10 صور في كل مرة
   const [currentPage, setCurrentPage] = useState(0);
   const IMAGES_PER_PAGE = 10;
+  
+  // Device preview animation
+  const [deviceSlideIndex, setDeviceSlideIndex] = useState(0);
 
   // Progressive loading timers
   useEffect(() => {
@@ -108,6 +111,22 @@ export default function GraphicDesignSection() {
       clearTimeout(timer3);
     };
   }, []);
+  
+  // Device preview slides - عينة من الصور
+  const socialSlides = useMemo(() => {
+    const social = galleries.social as string[];
+    // خد أول 10 صور بس للعرض في الـ device
+    return social.slice(0, 10);
+  }, [galleries.social]);
+  
+  // Animate device preview
+  useEffect(() => {
+    if (socialSlides.length === 0) return;
+    const timer = setInterval(() => {
+      setDeviceSlideIndex((prev) => (prev + 1) % socialSlides.length);
+    }, 3000); // كل 3 ثواني
+    return () => clearInterval(timer);
+  }, [socialSlides.length]);
 
   const currentData = activeKey ? galleries[activeKey] : [];
   const isBrochureReportsView = activeKey === "brochure";
@@ -236,10 +255,16 @@ export default function GraphicDesignSection() {
             <div className={styles.devicePaneMobile} aria-hidden="true">
               <div className={styles.device}>
                 <div className={styles.deviceScreen}>
-                  <div className={styles.devicePlaceholder}>
-                    <i className="fas fa-images" style={{fontSize: '48px', color: '#ff8400'}}></i>
-                    <p style={{color: '#ff8400', fontSize: '12px', fontWeight: '600', margin: '10px 0 0 0'}}>اضغط لمشاهدة الأعمال</p>
-                  </div>
+                  {socialSlides.length > 0 && (
+                    <Image
+                      src={socialSlides[deviceSlideIndex]}
+                      alt="معاينة الأعمال"
+                      fill
+                      className={styles.deviceImage}
+                      sizes="(max-width: 768px) 200px, 0px"
+                      loading="lazy"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -299,10 +324,16 @@ export default function GraphicDesignSection() {
           <div className={styles.devicePane} aria-hidden="true">
             <div className={styles.device}>
               <div className={styles.deviceScreen}>
-                <div className={styles.devicePlaceholder}>
-                  <i className="fas fa-images" style={{fontSize: '64px', color: '#ff8400'}}></i>
-                  <p style={{color: '#ff8400', fontSize: '14px', fontWeight: '600', margin: '10px 0 0 0'}}>اضغط لمشاهدة الأعمال</p>
-                </div>
+                {socialSlides.length > 0 && (
+                  <Image
+                    src={socialSlides[deviceSlideIndex]}
+                    alt="معاينة الأعمال"
+                    fill
+                    className={styles.deviceImage}
+                    sizes="(min-width: 769px) 300px, 0px"
+                    loading="lazy"
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -475,54 +506,58 @@ export default function GraphicDesignSection() {
                     ))}
                   </div>
                   
-                  {/* Page Navigation */}
+                  {/* Page Navigation - Split into two parts */}
                   {totalPages > 1 && (
-                    <div className={styles.pageNavigation}>
-                      <button 
-                        className={styles.pageBtn}
-                        onClick={() => {
-                          if (hasPrevPage) {
-                            setTimeout(() => {
-                              setIndex(0);
-                              setCurrentPage(p => p - 1);
-                            }, 0);
-                          }
-                        }}
-                        disabled={!hasPrevPage}
-                      >
-                        <i className="fas fa-chevron-right"></i>
-                        <span>الصفحة السابقة</span>
-                      </button>
-                      
-                      <div className={styles.pageInfo}>
-                        <span>صفحة {currentPage + 1} من {totalPages}</span>
-                        <span className={styles.imageRange}>
-                          ({Math.min(endIndex, allImages.length)}-{startIndex + 1} من {allImages.length})
-                        </span>
+                    <>
+                      {/* Right side - Previous button */}
+                      <div className={styles.pageNavigationRight}>
+                        <button 
+                          className={styles.pageBtn}
+                          onClick={() => {
+                            if (hasPrevPage) {
+                              setTimeout(() => {
+                                setIndex(0);
+                                setCurrentPage(p => p - 1);
+                              }, 0);
+                            }
+                          }}
+                          disabled={!hasPrevPage}
+                        >
+                          <i className="fas fa-chevron-right"></i>
+                          <span>السابقة</span>
+                        </button>
                       </div>
                       
-                      <button 
-                        className={styles.pageBtn}
-                        onClick={() => {
-                          if (hasNextPage) {
-                            setTimeout(() => {
-                              setIndex(0);
-                              setCurrentPage(p => p + 1);
-                            }, 0);
-                          }
-                        }}
-                        disabled={!hasNextPage}
-                      >
-                        <span>الصفحة التالية</span>
-                        <i className="fas fa-chevron-left"></i>
-                      </button>
-                    </div>
+                      {/* Left side - Info and Next button */}
+                      <div className={styles.pageNavigationLeft}>
+                        <div className={styles.pageInfo}>
+                          <span>صفحة {currentPage + 1} من {totalPages}</span>
+                          <span className={styles.imageRange}>
+                            ({Math.min(endIndex, allImages.length)}-{startIndex + 1} من {allImages.length})
+                          </span>
+                          <span className={styles.imageCounter}>
+                            صورة {startIndex + index + 1} / {allImages.length}
+                          </span>
+                        </div>
+                        
+                        <button 
+                          className={styles.pageBtn}
+                          onClick={() => {
+                            if (hasNextPage) {
+                              setTimeout(() => {
+                                setIndex(0);
+                                setCurrentPage(p => p + 1);
+                              }, 0);
+                            }
+                          }}
+                          disabled={!hasNextPage}
+                        >
+                          <span>التالية</span>
+                          <i className="fas fa-chevron-left"></i>
+                        </button>
+                      </div>
+                    </>
                   )}
-                  
-                  {/* Image Counter */}
-                  <div className={styles.imageCounter}>
-                    <span>صورة {startIndex + index + 1} / {allImages.length}</span>
-                  </div>
                 </div>
               )}
             </div>
