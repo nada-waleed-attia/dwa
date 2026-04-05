@@ -51,10 +51,10 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
         className={styles.heroFallback}
         aria-hidden="true"
       />
-      {/* Spline Robot temporarily disabled due to HMR issues */}
-      {/* <div className={styles.heroSpline} aria-hidden="true">
+      {/* Spline Robot 3D */}
+      <div className={styles.heroSpline} aria-hidden="true">
         <SplineScene scene={heroSceneUrl} />
-      </div> */}
+      </div>
       <div className={styles.heroOverlay}></div>
       
       <div className={styles.heroContainer}>
