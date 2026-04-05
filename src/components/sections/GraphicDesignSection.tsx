@@ -531,10 +531,6 @@ export default function GraphicDesignSection() {
                       {/* Left side - Info and Next button */}
                       <div className={styles.pageNavigationLeft}>
                         <div className={styles.pageInfo}>
-                          <span>صفحة {currentPage + 1} من {totalPages}</span>
-                          <span className={styles.imageRange}>
-                            ({Math.min(endIndex, allImages.length)}-{startIndex + 1} من {allImages.length})
-                          </span>
                           <span className={styles.imageCounter}>
                             صورة {startIndex + index + 1} / {allImages.length}
                           </span>
