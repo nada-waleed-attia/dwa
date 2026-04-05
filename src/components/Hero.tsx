@@ -2,10 +2,9 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import styles from "./Hero.module.css";
 
-// Lazy load Spline only after user interaction
+// Lazy load Spline with priority
 const SplineScene = dynamic(() => import("@/components/spline/SplineScene"), {
-  ssr: false,
-  loading: () => null
+  ssr: false
 });
 
 interface HeroProps {
@@ -15,12 +14,12 @@ interface HeroProps {
 export default function Hero({ title = "للبرمجيات والأعمال التقنية" }: HeroProps) {
   const heroSceneUrl = "https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode";
   
-  // Only load Spline after user interaction (optional enhancement)
-  // const [loadSpline, setLoadSpline] = useState(false);
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setLoadSpline(true), 3000);
-  //   return () => clearTimeout(timer);
-  // }, []);
+  // ========================================
+  // 🎮 للتحكم في الروبوت: غيري القيمة هنا
+  // true = الروبوت يشتغل ✅
+  // false = الروبوت يتوقف ❌
+  // ========================================
+  const SHOW_ROBOT = true;
   
   const leftServices = [
     { icon: "fas fa-laptop-code", label: "حــلــول بــرمــجــيـــة", href: "#solutions" },
@@ -51,10 +50,12 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
         className={styles.heroFallback}
         aria-hidden="true"
       />
-      {/* Spline Robot 3D */}
-      <div className={styles.heroSpline} aria-hidden="true">
-        <SplineScene scene={heroSceneUrl} />
-      </div>
+      {/* Spline Robot 3D - يظهر فقط لو SHOW_ROBOT = true */}
+      {SHOW_ROBOT && (
+        <div className={styles.heroSpline} aria-hidden="true">
+          <SplineScene scene={heroSceneUrl} />
+        </div>
+      )}
       <div className={styles.heroOverlay}></div>
       
       <div className={styles.heroContainer}>

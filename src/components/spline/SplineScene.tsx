@@ -34,7 +34,7 @@ export default function SplineScene({ scene = DEFAULT_SCENE, className }: Spline
   if (isLoading || !Spline) {
     return (
       <div className={containerClassName}>
-        <div className={styles.splineLoading}>Loading 3D Robot...</div>
+        {/* Loading... */}
       </div>
     );
   }

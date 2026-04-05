@@ -33,6 +33,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://prod.spline.design" />
         <link rel="dns-prefetch" href="//prod.spline.design" />
         
+        {/* Preload Spline scene for faster robot loading */}
+        <link 
+          rel="preload" 
+          href="https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode" 
+          as="fetch" 
+          crossOrigin="anonymous"
+        />
+        
         {/* Load Font Awesome normally */}
         <link
           rel="stylesheet"
