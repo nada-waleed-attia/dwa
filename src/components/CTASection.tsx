@@ -3,7 +3,7 @@ import styles from "./CTASection.module.css";
 export default function CTASection() {
   return (
     <section className={styles.ctaSection}>
-      <video autoPlay muted loop playsInline className={styles.ctaVideo}>
+      <video autoPlay muted loop playsInline preload="none" className={styles.ctaVideo}>
         <source src="/server.mp4" type="video/mp4" />
       </video>
       

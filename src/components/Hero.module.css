@@ -307,8 +307,10 @@
     object-position: center;
   }
 
+  /* Keep robot visible on all screens */
   .heroSpline {
-    display: none;
+    display: block;
+    opacity: 0.8; /* Slightly transparent on mobile for better text readability */
   }
 
   .heroContainer {

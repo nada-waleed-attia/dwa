@@ -902,4 +902,136 @@
     min-height: min(68vh, 500px);
     aspect-ratio: 3 / 4;
   }
+}/* Load More Button Overlay */
+.loadMoreOverlay {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.loadMoreBtn {
+  background: linear-gradient(135deg, #ff8400 0%, #ff6a00 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(255, 132, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.loadMoreBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 132, 0, 0.6);
+}
+
+.loadMoreBtn i {
+  font-size: 18px;
+}
+
+/* Image Counter */
+.imageCounter {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 5;
+}
+/* Page Navigation */
+.pageNavigation {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 12px 20px;
+  border-radius: 30px;
+  z-index: 10;
+}
+
+.pageBtn {
+  background: linear-gradient(135deg, #ff8400 0%, #ff6a00 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 132, 0, 0.5);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 150px;
+}
+
+.imageRange {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .pageNavigation {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 15px;
+  }
+  
+  .pageBtn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .pageInfo {
+    font-size: 12px;
+    min-width: auto;
+  }
+}
+/* Device Placeholder - No images loaded initially */
+.devicePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 132, 0, 0.1) 0%, rgba(255, 106, 0, 0.1) 100%);
+  gap: 10px;
+  text-align: center;
+  padding: 20px;
 }

@@ -4,7 +4,12 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./GraphicDesignSection.module.css";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import LazyIframe from "@/components/LazyIframe";
+
+// Lazy load icons only when needed
+import dynamic from "next/dynamic";
+const FiChevronLeft = dynamic(() => import("react-icons/fi").then(mod => ({ default: mod.FiChevronLeft })), { ssr: false });
+const FiChevronRight = dynamic(() => import("react-icons/fi").then(mod => ({ default: mod.FiChevronRight })), { ssr: false });
 
 type PdfItem = {
   title: string;
@@ -15,6 +20,10 @@ const buildImageRange = (base: string, start: number, end: number, ext = "webp")
   Array.from({ length: end - start + 1 }, (_, i) => `${base}/${start + i}.${ext}`);
 
 export default function GraphicDesignSection() {
+  // Progressive loading states
+  const [layer2Loaded, setLayer2Loaded] = useState(false); // Tiles
+  const [layer3Loaded, setLayer3Loaded] = useState(false); // CTA + Arrow
+  
   const galleries = useMemo(
     () => ({
       identity: [
@@ -82,7 +91,23 @@ export default function GraphicDesignSection() {
   const [index, setIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const [showPlaylist, setShowPlaylist] = useState(false);
-  const [deviceSlideIndex, setDeviceSlideIndex] = useState(0);
+  
+  // Lazy load modal content only when opened
+  const [modalMounted, setModalMounted] = useState(false);
+  
+  // Pagination for images - يحمل 10 صور في كل مرة
+  const [currentPage, setCurrentPage] = useState(0);
+  const IMAGES_PER_PAGE = 10;
+
+  // Progressive loading timers
+  useEffect(() => {
+    const timer2 = setTimeout(() => setLayer2Loaded(true), 400);
+    const timer3 = setTimeout(() => setLayer3Loaded(true), 800);
+    return () => {
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
 
   const currentData = activeKey ? galleries[activeKey] : [];
   const isBrochureReportsView = activeKey === "brochure";
@@ -90,59 +115,96 @@ export default function GraphicDesignSection() {
   const isLogoAnimationView = activeKey === "logoAnimation";
 
   const isPDFView = isIdentityView || isBrochureReportsView;
-  const images = isPDFView || isLogoAnimationView ? [] : (currentData as string[]);
-
-  const socialSlides = useMemo(() => {
-    return [...galleries.social]
-      .map((src, i) => {
-        const seed = `${src}-${i}`;
-        let hash = 0;
-        for (let c = 0; c < seed.length; c += 1) {
-          hash = (hash * 31 + seed.charCodeAt(c)) % 2147483647;
-        }
-        return { src, hash };
-      })
-      .sort((a, b) => a.hash - b.hash)
-      .slice(0, 18)
-      .map((entry) => entry.src);
-  }, [galleries.social]);
+  const allImages = isPDFView || isLogoAnimationView ? [] : (currentData as string[]);
+  
+  // حساب الصور للصفحة الحالية
+  const totalPages = Math.ceil(allImages.length / IMAGES_PER_PAGE);
+  const startIndex = currentPage * IMAGES_PER_PAGE;
+  const endIndex = startIndex + IMAGES_PER_PAGE;
+  const images = allImages.slice(startIndex, endIndex);
+  const hasNextPage = currentPage < totalPages - 1;
+  const hasPrevPage = currentPage > 0;
+  
+  // Reset index when page changes
+  useEffect(() => {
+    setIndex(0);
+  }, [currentPage]);
 
   useEffect(() => {
     if (!activeKey || images.length <= 1 || !autoPlay) return;
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % images.length);
+      setIndex((i) => {
+        const nextIndex = i + 1;
+        // لو وصل لآخر صورة في الصفحة الحالية
+        if (nextIndex >= images.length) {
+          // لو فيه صفحة تانية، روح عليها
+          if (hasNextPage) {
+            setCurrentPage(p => p + 1);
+            setAutoPlay(false); // أوقف auto-play مؤقتاً
+            setTimeout(() => setAutoPlay(true), 100); // أعد تشغيله
+            return 0; // ابدأ من أول صورة في الصفحة الجديدة
+          }
+          // لو مفيش، ارجع للأول
+          return 0;
+        }
+        return nextIndex;
+      });
     }, 4000);
     return () => clearInterval(timer);
-  }, [activeKey, images.length, autoPlay]);
+  }, [activeKey, images.length, autoPlay, hasNextPage]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
       if (!activeKey || images.length === 0) return;
-      if (e.key === "ArrowRight") setIndex((i) => (i + 1) % images.length);
-      if (e.key === "ArrowLeft") setIndex((i) => (i - 1 + images.length) % images.length);
+      
+      if (e.key === "ArrowRight") {
+        const nextIndex = index + 1;
+        if (nextIndex >= images.length) {
+          if (hasNextPage) {
+            setTimeout(() => {
+              setIndex(0);
+              setCurrentPage(p => p + 1);
+            }, 0);
+          } else {
+            setIndex(0);
+          }
+        } else {
+          setIndex(nextIndex);
+        }
+      }
+      
+      if (e.key === "ArrowLeft") {
+        const prevIndex = index - 1;
+        if (prevIndex < 0) {
+          if (hasPrevPage) {
+            setTimeout(() => {
+              setIndex(IMAGES_PER_PAGE - 1);
+              setCurrentPage(p => p - 1);
+            }, 0);
+          } else {
+            setIndex(images.length - 1);
+          }
+        } else {
+          setIndex(prevIndex);
+        }
+      }
     };
 
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [activeKey, images.length]);
+  }, [activeKey, images.length, hasNextPage, hasPrevPage, IMAGES_PER_PAGE, index]);
 
   useEffect(() => {
     return () => { document.body.style.overflow = ""; };
   }, []);
 
-  useEffect(() => {
-    if (socialSlides.length <= 1) return;
-    const timer = setInterval(() => {
-      setDeviceSlideIndex((prev) => (prev + 1) % socialSlides.length);
-    }, 2200);
-    return () => clearInterval(timer);
-  }, [socialSlides.length]);
-
   const open = (key: keyof typeof galleries) => {
     setActiveKey(key);
     setIndex(0);
     setAutoPlay(true);
+    setModalMounted(true);
+    setCurrentPage(0); // Reset to first page
     document.body.style.overflow = "hidden";
   };
 
@@ -151,6 +213,7 @@ export default function GraphicDesignSection() {
     setAutoPlay(true);
     setShowPlaylist(false);
     document.body.style.overflow = "";
+    // Keep modalMounted true to avoid re-mounting
   };
 
   const togglePlaylist = () => {
@@ -173,25 +236,16 @@ export default function GraphicDesignSection() {
             <div className={styles.devicePaneMobile} aria-hidden="true">
               <div className={styles.device}>
                 <div className={styles.deviceScreen}>
-                  {socialSlides.length > 0 ? (
-                    <Image
-                      src={socialSlides[deviceSlideIndex % socialSlides.length]}
-                      alt={`معاينة تصميم ${deviceSlideIndex + 1}`}
-                      fill
-                      className={styles.deviceImage}
-                      sizes="180px"
-                      loading="lazy"
-                      unoptimized
-                      onError={(e) => { e.currentTarget.style.display = "none"; }}
-                    />
-                  ) : (
-                    <div className={styles.deviceFallback} />
-                  )}
+                  <div className={styles.devicePlaceholder}>
+                    <i className="fas fa-images" style={{fontSize: '48px', color: '#ff8400'}}></i>
+                    <p style={{color: '#ff8400', fontSize: '12px', fontWeight: '600', margin: '10px 0 0 0'}}>اضغط لمشاهدة الأعمال</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className={styles.tiles}>
+            {layer2Loaded && (
+              <div className={styles.tiles}>
               <button type="button" className={`${styles.tile} ${styles.t1}`} onClick={() => open("identity")}>
                 <Image src="/icons/icon1.webp" alt={"تصميم الهوية"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تصميم الهوية الكاملة"}</h3>
@@ -228,8 +282,10 @@ export default function GraphicDesignSection() {
                 <p className={styles.tileText}>{"أغلفة بصرية ملهمة ومعبرة عن المحتوى."}</p>
               </button>
             </div>
+            )}
 
-            <div className={styles.ctaWrap}>
+            {layer3Loaded && (
+              <div className={styles.ctaWrap}>
               <a href="https://wa.me/201555855857" target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>{"المزيد"}</a>
               <div className={styles.scrollDownArrow}>
                 <a href="#multimedia" aria-label={"الانتقال إلى قسم المالتيميديا"}>
@@ -237,34 +293,24 @@ export default function GraphicDesignSection() {
                 </a>
               </div>
             </div>
+            )}
           </div>
 
           <div className={styles.devicePane} aria-hidden="true">
             <div className={styles.device}>
               <div className={styles.deviceScreen}>
-                {socialSlides.length > 0 ? (
-                  <Image
-                    src={socialSlides[deviceSlideIndex % socialSlides.length]}
-                    alt={`معاينة تصميم ${deviceSlideIndex + 1}`}
-                    fill
-                    className={styles.deviceImage}
-                    sizes="(max-width: 900px) 0px, 280px"
-                    loading="lazy"
-                    unoptimized
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                ) : (
-                  <div className={styles.deviceFallback} />
-                )}
+                <div className={styles.devicePlaceholder}>
+                  <i className="fas fa-images" style={{fontSize: '64px', color: '#ff8400'}}></i>
+                  <p style={{color: '#ff8400', fontSize: '14px', fontWeight: '600', margin: '10px 0 0 0'}}>اضغط لمشاهدة الأعمال</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {activeKey && createPortal(
+      {/* Modal - يحمل فقط عند فتحه */}
+      {activeKey && modalMounted && createPortal(
         <div className={styles.modalOverlay} onClick={close} role="dialog" aria-modal="true">
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
@@ -292,12 +338,13 @@ export default function GraphicDesignSection() {
                 <div className={styles.emptyNotice}>{"لا توجد أعمال لعرضها الآن"}</div>
               ) : isLogoAnimationView ? (
                 <div className={styles.youtubePlaylistWrap}>
-                  <iframe
+                  <LazyIframe
                     src={`https://www.youtube.com/embed/videoseries?list=${galleries.logoAnimation}`}
                     title={"قائمة تشغيل لوجو أنيميشن"}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className={styles.youtubeEmbed}
+                    rootMargin="400px"
                   />
                   <div className={styles.playlistInfo}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -353,14 +400,44 @@ export default function GraphicDesignSection() {
 
                   <button
                     className={`${styles.navBtn} ${styles.prev}`}
-                    onClick={() => setIndex((i) => (i - 1 + images.length) % images.length)}
+                    onClick={() => {
+                      const prevIndex = index - 1;
+                      if (prevIndex < 0) {
+                        // وصل لأول صورة في الصفحة
+                        if (hasPrevPage) {
+                          setTimeout(() => {
+                            setIndex(IMAGES_PER_PAGE - 1); // آخر صورة في الصفحة السابقة
+                            setCurrentPage(p => p - 1);
+                          }, 0);
+                        } else {
+                          setIndex(images.length - 1); // آخر صورة في الصفحة الحالية
+                        }
+                      } else {
+                        setIndex(prevIndex);
+                      }
+                    }}
                     aria-label={"\u0627\u0644\u0633\u0627\u0628\u0642"}
                   >
                     <FiChevronRight size={22} aria-hidden="true" />
                   </button>
                   <button
                     className={`${styles.navBtn} ${styles.next}`}
-                    onClick={() => setIndex((i) => (i + 1) % images.length)}
+                    onClick={() => {
+                      const nextIndex = index + 1;
+                      if (nextIndex >= images.length) {
+                        // وصل لآخر صورة في الصفحة
+                        if (hasNextPage) {
+                          setTimeout(() => {
+                            setIndex(0);
+                            setCurrentPage(p => p + 1);
+                          }, 0);
+                        } else {
+                          setIndex(0); // ارجع للأول
+                        }
+                      } else {
+                        setIndex(nextIndex);
+                      }
+                    }}
                     aria-label={"\u0627\u0644\u062A\u0627\u0644\u064A"}
                   >
                     <FiChevronLeft size={22} aria-hidden="true" />
@@ -397,6 +474,55 @@ export default function GraphicDesignSection() {
                       />
                     ))}
                   </div>
+                  
+                  {/* Page Navigation */}
+                  {totalPages > 1 && (
+                    <div className={styles.pageNavigation}>
+                      <button 
+                        className={styles.pageBtn}
+                        onClick={() => {
+                          if (hasPrevPage) {
+                            setTimeout(() => {
+                              setIndex(0);
+                              setCurrentPage(p => p - 1);
+                            }, 0);
+                          }
+                        }}
+                        disabled={!hasPrevPage}
+                      >
+                        <i className="fas fa-chevron-right"></i>
+                        <span>الصفحة السابقة</span>
+                      </button>
+                      
+                      <div className={styles.pageInfo}>
+                        <span>صفحة {currentPage + 1} من {totalPages}</span>
+                        <span className={styles.imageRange}>
+                          ({Math.min(endIndex, allImages.length)}-{startIndex + 1} من {allImages.length})
+                        </span>
+                      </div>
+                      
+                      <button 
+                        className={styles.pageBtn}
+                        onClick={() => {
+                          if (hasNextPage) {
+                            setTimeout(() => {
+                              setIndex(0);
+                              setCurrentPage(p => p + 1);
+                            }, 0);
+                          }
+                        }}
+                        disabled={!hasNextPage}
+                      >
+                        <span>الصفحة التالية</span>
+                        <i className="fas fa-chevron-left"></i>
+                      </button>
+                    </div>
+                  )}
+                  
+                  {/* Image Counter */}
+                  <div className={styles.imageCounter}>
+                    <span>صورة {startIndex + index + 1} / {allImages.length}</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -416,12 +542,13 @@ export default function GraphicDesignSection() {
                   </button>
                 </div>
                 <div className={styles.playlistContent}>
-                  <iframe
+                  <LazyIframe
                     src={`https://www.youtube.com/embed/videoseries?list=${currentPlaylistId}`}
                     title={`${"فيديوهات"} ${titles[activeKey]}`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className={styles.playlistEmbed}
+                    rootMargin="400px"
                   />
                 </div>
               </div>

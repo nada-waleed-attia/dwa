@@ -668,3 +668,26 @@
     width: 92vw;
   }
 }
+
+.showMoreWrapper {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.showMoreBtn {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #ff8400 0%, #ff6a00 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 132, 0, 0.4);
+}
+
+.showMoreBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 132, 0, 0.6);
+}

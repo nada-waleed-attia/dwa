@@ -12,8 +12,9 @@ export default function TechConsultingSection() {
           loop
           muted
           playsInline
+          preload="none"
         >
-          <source src="/Digital-transformation.mp4" type="video/mp4" />
+          <source src="/server.mp4" type="video/mp4" />
         </video>
       </div>
 

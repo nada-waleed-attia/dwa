@@ -1,6 +1,22 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import styles from "./ContentCreationSection.module.css";
 
 export default function ContentCreationSection() {
+  // Progressive loading states
+  const [layer2Loaded, setLayer2Loaded] = useState(false); // Services chips
+  const [layer3Loaded, setLayer3Loaded] = useState(false); // CTA + Arrow
+  
+  useEffect(() => {
+    const timer2 = setTimeout(() => setLayer2Loaded(true), 400);
+    const timer3 = setTimeout(() => setLayer3Loaded(true), 800);
+    return () => {
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
   return (
     <section id="content-creation" className={styles.wrap}>
       <div className={styles.videoLayer} aria-hidden="true">
@@ -11,6 +27,7 @@ export default function ContentCreationSection() {
           muted
           loop
           playsInline
+          preload="none"
         />
       </div>
       <div className={styles.backdrop}>
@@ -39,36 +56,41 @@ export default function ContentCreationSection() {
             خدماتنا
           </h3>
 
-          <ul className={styles.chips}>
-            <li className={styles.chip} data-aos="fade-up" data-aos-delay="80">
-              <i className="fas fa-archive"></i>
-              <span>الأرشــفــة الإلـكـــتـــرونــيـــة</span>
-            </li>
-            <li className={styles.chip} data-aos="fade-up" data-aos-delay="160">
-              <i className="fas fa-spell-check"></i>
-              <span>الــتــــدقــــيــــق الــلــغــــوي</span>
-            </li>
-            <li className={styles.chip} data-aos="fade-up" data-aos-delay="240">
-              <i className="fas fa-newspaper"></i>
-              <span>صـــنـــاعـــة الــــمـــقـــــالات</span>
-            </li>
-            <li className={styles.chip} data-aos="fade-up" data-aos-delay="320">
-              <i className="fas fa-scroll"></i>
-              <span>تـحـقـيـق الــمــخــطــوطـــات</span>
-            </li>
-            <li className={styles.chip} data-aos="fade-up" data-aos-delay="400">
-              <i className="fas fa-language"></i>
-              <span>صناعة الـمـحـتـوى الـمـترجـم</span>
-            </li>
-            <li className={styles.chip} data-aos="fade-up" data-aos-delay="480">
-              <i className="fas fa-hashtag"></i>
-              <span>إبداع المنـشـورات والـتـغريدات</span>
-            </li>
-          </ul>
-           <a href="https://wa.me/201555855857" className={styles.cta} target="_blank" rel="noopener noreferrer">
-            <i className={`fas fa-pen-nib ${styles.ctaIcon}`}></i>
-            <span>المزيد</span>
-          </a>
+          {layer2Loaded && (
+            <ul className={styles.chips}>
+              <li className={styles.chip} data-aos="fade-up" data-aos-delay="80">
+                <i className="fas fa-archive"></i>
+                <span>الأرشــفــة الإلـكـــتـــرونــيـــة</span>
+              </li>
+              <li className={styles.chip} data-aos="fade-up" data-aos-delay="160">
+                <i className="fas fa-spell-check"></i>
+                <span>الــتــــدقــــيــــق الــلــغــــوي</span>
+              </li>
+              <li className={styles.chip} data-aos="fade-up" data-aos-delay="240">
+                <i className="fas fa-newspaper"></i>
+                <span>صـــنـــاعـــة الــــمـــقـــــالات</span>
+              </li>
+              <li className={styles.chip} data-aos="fade-up" data-aos-delay="320">
+                <i className="fas fa-scroll"></i>
+                <span>تـحـقـيـق الــمــخــطــوطـــات</span>
+              </li>
+              <li className={styles.chip} data-aos="fade-up" data-aos-delay="400">
+                <i className="fas fa-language"></i>
+                <span>صناعة الـمـحـتـوى الـمـترجـم</span>
+              </li>
+              <li className={styles.chip} data-aos="fade-up" data-aos-delay="480">
+                <i className="fas fa-hashtag"></i>
+                <span>إبداع المنـشـورات والـتـغريدات</span>
+              </li>
+            </ul>
+          )}
+          
+          {layer3Loaded && (
+            <a href="https://wa.me/201555855857" className={styles.cta} target="_blank" rel="noopener noreferrer">
+              <i className={`fas fa-pen-nib ${styles.ctaIcon}`}></i>
+              <span>المزيد</span>
+            </a>
+          )}
         </div>
 
         <div className={styles.right} data-aos="fade-up" data-aos-duration="1000">
@@ -79,31 +101,39 @@ export default function ContentCreationSection() {
               className={styles.heroImg}
               loading="lazy"
             />
-            <div className={`${styles.badge} ${styles.badge1}`}>
-              <div className={styles.badgeIcon}><i className="fas fa-bullhorn"></i></div>
-              <div className={styles.badgeText}>محتوى تسويقي</div>
-            </div>
-            <div className={`${styles.badge} ${styles.badge2}`}>
-              <div className={styles.badgeIcon}><i className="fas fa-graduation-cap"></i></div>
-              <div className={styles.badgeText}>محتوى تعليمي</div>
-            </div>
-            <div className={`${styles.badge} ${styles.badge3}`}>
-              <div className={styles.badgeIcon}><i className="fas fa-heart"></i></div>
-              <div className={styles.badgeText}>محتوى دعوي</div>
-            </div>
+            {layer2Loaded && (
+              <>
+                <div className={`${styles.badge} ${styles.badge1}`}>
+                  <div className={styles.badgeIcon}><i className="fas fa-bullhorn"></i></div>
+                  <div className={styles.badgeText}>محتوى تسويقي</div>
+                </div>
+                <div className={`${styles.badge} ${styles.badge2}`}>
+                  <div className={styles.badgeIcon}><i className="fas fa-graduation-cap"></i></div>
+                  <div className={styles.badgeText}>محتوى تعليمي</div>
+                </div>
+                <div className={`${styles.badge} ${styles.badge3}`}>
+                  <div className={styles.badgeIcon}><i className="fas fa-heart"></i></div>
+                  <div className={styles.badgeText}>محتوى دعوي</div>
+                </div>
+              </>
+            )}
           </div>
-          <div className={styles.neon}>
-            <div className={styles.typingBox}>
-              <span className={styles.typingText}>الكلمة_تصنع_الفرق</span>
+          {layer2Loaded && (
+            <div className={styles.neon}>
+              <div className={styles.typingBox}>
+                <span className={styles.typingText}>الكلمة_تصنع_الفرق</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      <div className={styles.scrollDownArrow}>
-        <a href="#cloud-hosting" aria-label="الانتقال إلى قسم السيرفر والاستضافة">
-          <i className="fas fa-chevron-down"></i>
-        </a>
-      </div>
+      {layer3Loaded && (
+        <div className={styles.scrollDownArrow}>
+          <a href="#cloud-hosting" aria-label="الانتقال إلى قسم السيرفر والاستضافة">
+            <i className="fas fa-chevron-down"></i>
+          </a>
+        </div>
+      )}
     </section>
   );
 }

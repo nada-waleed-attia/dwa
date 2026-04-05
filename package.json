@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3001",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start -H 0.0.0.0 -p 3001",
     "lint": "eslint",
     "test": "vitest --run",
@@ -12,10 +13,16 @@
     "test:ui": "vitest --ui",
     "optimize-images": "node scripts/optimize-images.js",
     "update-image-paths": "node scripts/update-image-paths.js",
-    "optimize-all": "npm run optimize-images && npm run update-image-paths"
+    "compress-images": "node scripts/compress-images.js",
+    "optimize-all": "npm run optimize-images && npm run update-image-paths",
+    "upload-cloudinary": "node scripts/upload-to-cloudinary.js",
+    "analyze": "node scripts/analyze-bundle.js",
+    "perf": "npm run build && npm run analyze"
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
+    "cloudinary": "^2.9.0",
+    "dotenv": "^17.4.0",
     "next": "16.1.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",

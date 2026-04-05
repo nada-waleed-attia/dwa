@@ -1,10 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Optimize production builds
+  reactStrictMode: true,
+  compress: true,
+  
   images: {
-    formats: ['image/webp', 'image/avif'],
+    formats: ['image/avif', 'image/webp'], // AVIF first (better compression)
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 31536000, // Cache images for 1 year
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
@@ -12,6 +20,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  
   async headers() {
     return [
       {
@@ -22,6 +31,10 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
         ],
       },
       {
@@ -31,6 +44,26 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000',
+          },
+        ],
+      },
+      {
+        source: '/:all*(woff|woff2|eot|ttf|otf)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/:all*(js|css)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },

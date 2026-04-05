@@ -13,7 +13,7 @@
 .bgImage {
   position: absolute;
   inset: 0;
-  background-image: url("/red-blue-circuit-board-technology-data-stream-background.webp");
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   background-size: cover;
   background-position: center;
   z-index: 0;

@@ -9,3 +9,63 @@
 .snapContainer {
   background: var(--background);
 }
+
+/* ============================================ */
+/* Skeleton Loader Styles */
+/* ============================================ */
+.sectionSkeleton {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+}
+
+.skeletonContent {
+  width: 100%;
+  max-width: 1200px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonTitle {
+  height: 48px;
+  background: linear-gradient(90deg, rgba(255, 132, 0, 0.1) 25%, rgba(255, 132, 0, 0.2) 50%, rgba(255, 132, 0, 0.1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  max-width: 400px;
+}
+
+.skeletonText {
+  height: 24px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.skeletonText:last-child {
+  max-width: 70%;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

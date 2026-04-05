@@ -1,0 +1,151 @@
+===========================================
+Lazy Loading Components - دليل الاستخدام
+===========================================
+
+المكونات المتاحة:
+-----------------
+
+1. LazyImage - للصور
+2. LazyVideo - للفيديوهات
+3. LazyIframe - لـ YouTube/Maps/iframes
+4. ProgressiveSection - للتحميل التدريجي داخل Section
+
+===========================================
+1. LazyImage
+===========================================
+
+الاستخدام:
+----------
+import LazyImage from "@/components/LazyImage";
+
+<LazyImage
+  src="/image.webp"
+  alt="Description"
+  width={800}
+  height={600}
+  rootMargin="200px"
+/>
+
+الفوائد:
+--------
+- يحمل الصورة فقط عند دخول viewport
+- fade-in animation تلقائي
+- skeleton placeholder
+
+===========================================
+2. LazyVideo
+===========================================
+
+الاستخدام:
+----------
+import LazyVideo from "@/components/LazyVideo";
+
+<LazyVideo
+  autoPlay
+  loop
+  muted
+  playsInline
+  rootMargin="200px"
+  pauseOnExit={true}
+>
+  <source src="/video.mp4" type="video/mp4" />
+  <source src="/video.webm" type="video/webm" />
+</LazyVideo>
+
+الفوائد:
+--------
+- يحمل الفيديو فقط عند viewport
+- يوقف التشغيل عند الخروج (اختياري)
+- يوفر bandwidth كبير
+
+===========================================
+3. LazyIframe
+===========================================
+
+الاستخدام:
+----------
+import LazyIframe from "@/components/LazyIframe";
+
+// YouTube
+<LazyIframe
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="Video"
+  thumbnailUrl="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg"
+  allow="accelerometer; autoplay; encrypted-media"
+  allowFullScreen
+  rootMargin="400px"
+/>
+
+// Google Maps
+<LazyIframe
+  src="https://www.google.com/maps/embed?pb=..."
+  title="Location"
+  rootMargin="400px"
+/>
+
+الفوائد:
+--------
+- يحمل iframe فقط عند الحاجة
+- يوفر موارد كبيرة (YouTube ثقيل جداً)
+- thumbnail preview للـ YouTube
+
+===========================================
+4. ProgressiveSection
+===========================================
+
+الاستخدام:
+----------
+import ProgressiveSection from "@/components/ProgressiveSection";
+
+<ProgressiveSection delay1={200} delay2={600} delay3={1000}>
+  {({ layer1, layer2, layer3, layer4 }) => (
+    <section>
+      {/* Layer 1: العنوان - فوري */}
+      <h2>العنوان</h2>
+      
+      {/* Layer 2: المحتوى - بعد 200ms */}
+      {layer2 && <Services />}
+      
+      {/* Layer 3: الصور - بعد 600ms */}
+      {layer3 && <Images />}
+      
+      {/* Layer 4: CTA - بعد 1000ms */}
+      {layer4 && <CTA />}
+    </section>
+  )}
+</ProgressiveSection>
+
+الفوائد:
+--------
+- تحميل تدريجي منظم
+- تحسين Perceived Performance
+- سهل الاستخدام
+
+===========================================
+التطبيقات الحالية:
+===========================================
+
+✅ GraphicDesignSection:
+   - LazyIframe للـ YouTube playlists
+   - Modal lazy loading
+   - Progressive tiles loading
+
+✅ AISection:
+   - 4 layers progressive loading
+   - Skeleton loaders
+
+✅ Page.tsx:
+   - 5 layers page loading
+   - Suspense boundaries
+
+===========================================
+النتائج المتوقعة:
+===========================================
+
+- تقليل Initial Load: 60-70%
+- تقليل Memory Usage: 50-60%
+- تحسين LCP: 50%
+- تحسين TBT: 70%
+- تحسين User Experience: كبير جداً
+
+===========================================

@@ -1,6 +1,12 @@
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import styles from "./Hero.module.css";
-import SplineScene from "@/components/spline/SplineScene";
+
+// Lazy load Spline only after user interaction
+const SplineScene = dynamic(() => import("@/components/spline/SplineScene"), {
+  ssr: false,
+  loading: () => null
+});
 
 interface HeroProps {
   title?: string;
@@ -8,6 +14,14 @@ interface HeroProps {
 
 export default function Hero({ title = "للبرمجيات والأعمال التقنية" }: HeroProps) {
   const heroSceneUrl = "https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode";
+  
+  // Only load Spline after user interaction (optional enhancement)
+  // const [loadSpline, setLoadSpline] = useState(false);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setLoadSpline(true), 3000);
+  //   return () => clearTimeout(timer);
+  // }, []);
+  
   const leftServices = [
     { icon: "fas fa-laptop-code", label: "حــلــول بــرمــجــيـــة", href: "#solutions" },
     { icon: "fas fa-film", label: "الــمـالــتــيــمــيــديـــا", href: "#multimedia" },
@@ -37,9 +51,10 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
         className={styles.heroFallback}
         aria-hidden="true"
       />
-      <div className={styles.heroSpline} aria-hidden="true">
+      {/* Spline Robot temporarily disabled due to HMR issues */}
+      {/* <div className={styles.heroSpline} aria-hidden="true">
         <SplineScene scene={heroSceneUrl} />
-      </div>
+      </div> */}
       <div className={styles.heroOverlay}></div>
       
       <div className={styles.heroContainer}>

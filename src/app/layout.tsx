@@ -3,11 +3,14 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
 
+// Optimize font loading - only load weights we actually use
 const cairo = Cairo({
   variable: "--font-cairo",
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "600", "700", "800", "900"],
+  subsets: ["arabic"],
+  weight: ["400", "600", "700"], // Reduced from 6 weights to 3
   display: "swap",
+  preload: true,
+  fallback: ["Arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -23,12 +26,18 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
+        {/* Preconnect to external domains for faster loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+        <link rel="preconnect" href="https://prod.spline.design" />
+        <link rel="dns-prefetch" href="//prod.spline.design" />
+        
+        {/* Load Font Awesome normally */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         />
-        <link rel="preconnect" href="https://prod.spline.design" crossOrigin="" />
-        <link rel="dns-prefetch" href="//prod.spline.design" />
       </head>
       <body className={`${cairo.variable}`}>
         {children}
