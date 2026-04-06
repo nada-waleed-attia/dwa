@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollToTop";
+import PageLoader from "@/components/PageLoader";
 
 // Optimize font loading - only load weights we actually use
 const cairo = Cairo({
@@ -48,6 +49,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${cairo.variable}`}>
+        <PageLoader />
         {children}
         <ScrollToTop />
       </body>
