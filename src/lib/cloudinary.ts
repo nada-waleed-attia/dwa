@@ -1,9 +1,7 @@
-import { v2 as cloudinary } from 'cloudinary';
+// Client-safe helper function - NO cloudinary SDK import here
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
 
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-export default cloudinary;
+export const cld = (path: string, width?: number): string => {
+  const w = width ? `,w_${width}` : '';
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto${w}/dwam-website${path}`;
+};

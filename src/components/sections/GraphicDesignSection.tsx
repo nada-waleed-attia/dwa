@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./GraphicDesignSection.module.css";
 import LazyIframe from "@/components/LazyIframe";
 import { getGallery, GalleryImage } from "@/lib/gallery";
+import { cld } from "@/lib/cloudinary";
 
 // Lazy load icons only when needed
 import dynamic from "next/dynamic";
@@ -24,9 +25,6 @@ const CLOUDINARY_FOLDERS: Record<string, string> = {
   flyers: 'flyers',
   books: '3d',
 };
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
 
 export default function GraphicDesignSection() {
   // Progressive loading states
@@ -116,12 +114,23 @@ export default function GraphicDesignSection() {
     };
   }, []);
   
-  // Device preview slides - من Cloudinary لو موجودة
+  // Device preview slides - تحمل من Cloudinary عند تحميل الـ section
   const socialSlides = useMemo(() => {
     const cloudSocial = cloudinaryImages['social'] || [];
     if (cloudSocial.length > 0) return cloudSocial.slice(0, 10);
     return [];
   }, [cloudinaryImages]);
+
+  // تحميل صور السوشيال ميديا للـ device preview عند تحميل الـ section
+  useEffect(() => {
+    if (cloudinaryImages['social']) return; // مش محتاج تحمل تاني
+    getGallery('socialmedia').then((images: GalleryImage[]) => {
+      setCloudinaryImages(prev => ({
+        ...prev,
+        social: images.map((img: GalleryImage) => img.secureUrl)
+      }));
+    }).catch(() => {});
+  }, []);
   
   // Animate device preview
   useEffect(() => {
@@ -297,37 +306,37 @@ export default function GraphicDesignSection() {
             {layer2Loaded && (
               <div className={styles.tiles}>
               <button type="button" className={`${styles.tile} ${styles.t1}`} onClick={() => open("identity")}>
-                <Image src={cld("/icons/icon1.webp")} alt={"تصميم الهوية"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon1.webp", 80)} alt={"تصميم الهوية"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تصميم الهوية الكاملة"}</h3>
                 <p className={styles.tileText}>{"بناء هوية متكاملة وشخصية قوية للعلامة."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t2}`} onClick={() => open("social")}>
-                <Image src={cld("/share_12550121.webp")} alt={"سوشيال ميديا"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/share_12550121.webp", 80)} alt={"سوشيال ميديا"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تصميمات السوشيال ميديا"}</h3>
                 <p className={styles.tileText}>{"قوالب ومحتوى بصري جذاب يعزز التفاعل."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t3}`} onClick={() => open("brochure")}>
-                <Image src={cld("/icons/icon3.webp")} alt={"تقارير وبروشورات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon3.webp", 80)} alt={"تقارير وبروشورات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تقارير وبروشورات"}</h3>
                 <p className={styles.tileText}>{"إخراج احترافي للمطبوعات المؤسسية."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t4}`} onClick={() => open("banners")}>
-                <Image src={cld("/icons/icon4.webp")} alt={"لافتات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon4.webp", 80)} alt={"لافتات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"لافتات وإعلانات"}</h3>
                 <p className={styles.tileText}>{"تصميم لافتات عالية الوضوح والأثر."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t5}`} onClick={() => open("flyers")}>
-                <Image src={cld("/icons/icon5.webp")} alt={"فلايرز"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon5.webp", 80)} alt={"فلايرز"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"فلايرز احترافية"}</h3>
                 <p className={styles.tileText}>{"مواد ترويجية مختصرة ومباشرة."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t6}`} onClick={() => open("books")}>
-                <Image src={cld("/book_5463282.webp")} alt={"أغلفة كتب"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/book_5463282.webp", 80)} alt={"أغلفة كتب"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"أغلفة كتب"}</h3>
                 <p className={styles.tileText}>{"أغلفة بصرية ملهمة ومعبرة عن المحتوى."}</p>
               </button>

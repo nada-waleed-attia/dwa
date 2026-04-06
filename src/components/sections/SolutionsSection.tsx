@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import styles from "./SolutionsSection.module.css";
-
-const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-const cld = (path: string) => `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto/dwam-website${path}`;
+import { cld } from "@/lib/cloudinary";
 
 export default function SolutionsSection() {
   const [laptopIndex, setLaptopIndex] = useState(0);
@@ -15,23 +14,23 @@ export default function SolutionsSection() {
   const [tabletDirection, setTabletDirection] = useState<'left' | 'right'>('right');
 
   const laptopProjects = [
-    { img: cld("/binqasim.sa.webp"), title: "وقف   بن القاسم ", url: "https://binqasim.sa/" },
-    { img: cld("/www.ofuq.academy.webp"), title: "منصة أفق التعليمية", url: "https://www.ofuq.academy/" },
-    { img: cld("/madarek.webp"), title: "مجلة مدارك", url: "https://mdarek.net/" },
-    { img: cld("/asmaa-allah.webp"), title: " الله أنيس المحبين", url: "http://allah-names.com" },
-    { img: cld("/makkah.webp"), title: "معالم مكة السياحية", url: "http://touristmecca.sa" },
+    { img: cld("/binqasim.sa.webp", 800), title: "وقف   بن القاسم ", url: "https://binqasim.sa/" },
+    { img: cld("/www.ofuq.academy.webp", 800), title: "منصة أفق التعليمية", url: "https://www.ofuq.academy/" },
+    { img: cld("/madarek.webp", 800), title: "مجلة مدارك", url: "https://mdarek.net/" },
+    { img: cld("/asmaa-allah.webp", 800), title: " الله أنيس المحبين", url: "http://allah-names.com" },
+    { img: cld("/makkah.webp", 800), title: "معالم مكة السياحية", url: "http://touristmecca.sa" },
   ];
 
   const mobileProjects = [
-    { img: cld("/nasmaser.webp"), title: "تطبيق ناس مصر", url: "https://play.google.com/store/apps/details?id=com.nasmasr.app" },
-    { img: cld("/joly.webp"), title: "تطبيق جولي تاكسي", url: "" },
-    { img: cld("/dubi.webp"), title: "DubiSale App", url: "" },
+    { img: cld("/nasmaser.webp", 400), title: "تطبيق ناس مصر", url: "https://play.google.com/store/apps/details?id=com.nasmasr.app" },
+    { img: cld("/joly.webp", 400), title: "تطبيق جولي تاكسي", url: "" },
+    { img: cld("/dubi.webp", 400), title: "DubiSale App", url: "" },
   ];
 
   const tabletProjects = [
-    { img: cld("/dewalls.webp"), title: "Dewalls Decorations", url: "http://dewalls.sa" },
-    { img: cld("/kittaan.com.webp"), title: "Kitaan Boutique", url: "https://kittaan.com/" },
-    { img: cld("/kittanhome.com.webp"), title: "Kittan Home", url: "https://kittanhome.com/" },
+    { img: cld("/dewalls.webp", 800), title: "Dewalls Decorations", url: "http://dewalls.sa" },
+    { img: cld("/kittaan.com.webp", 800), title: "Kitaan Boutique", url: "https://kittaan.com/" },
+    { img: cld("/kittanhome.com.webp", 800), title: "Kittan Home", url: "https://kittanhome.com/" },
   ];
 
   const nextLaptop = () => {
@@ -64,10 +63,10 @@ export default function SolutionsSection() {
   return (
     <section id="solutions" className={styles.wrap}>
       <div className={styles.floatingIcons} aria-hidden="true">
-        <img src={cld("/icons8-source-code-48.webp")} alt="" className={`${styles.floatIcon} ${styles.i1}`} />
-        <img src={cld("/ui-ux-icon.webp")} alt="" className={`${styles.floatIcon} ${styles.i2}`} />
-        <img src={cld("/auth-icon.webp")} alt="" className={`${styles.floatIcon} ${styles.i3}`} />
-        <img src={cld("/icons8-settings-64.webp")} alt="" className={`${styles.floatIcon} ${styles.i4}`} />
+        <Image src={cld("/icons8-source-code-48.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i1}`} width={48} height={48} loading="lazy" />
+        <Image src={cld("/ui-ux-icon.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i2}`} width={48} height={48} loading="lazy" />
+        <Image src={cld("/auth-icon.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i3}`} width={48} height={48} loading="lazy" />
+        <Image src={cld("/icons8-settings-64.webp", 64)} alt="" className={`${styles.floatIcon} ${styles.i4}`} width={64} height={64} loading="lazy" />
       </div>
       <div className={styles.inner}>
         <h2 className={styles.title}>حلول برمجية</h2>
@@ -81,7 +80,7 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.laptopWrap} ${styles[`slide-${laptopDirection}`]}`} key={laptopIndex}>
-                <img src={cld("/laptop-frame.webp")} alt="إطار لابتوب" className={styles.laptopImg} />
+                <Image src={cld("/laptop-frame.webp")} alt="إطار لابتوب" className={styles.laptopImg} width={800} height={500} loading="lazy" />
                 <div className={styles.screen}>
                   <div className={styles.scrollableContent}>
                     <a 
@@ -90,10 +89,14 @@ export default function SolutionsSection() {
                       rel="noopener noreferrer"
                       className={styles.projectLink}
                     >
-                      <img 
+                      <Image 
                         src={laptopProjects[laptopIndex].img} 
                         alt={laptopProjects[laptopIndex].title} 
-                        className={styles.projectImg} 
+                        className={styles.projectImg}
+                        width={800}
+                        height={500}
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </a>
                   </div>
@@ -129,10 +132,13 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.mobileWrap} ${styles[`slide-${mobileDirection}`]}`} key={mobileIndex}>
-                <img
+                <Image
                   src={cld("/realistic-front-view-smartphone-mockup-mobile-iphone-purple-frame-with-blank-white-display-vector.webp")}
                   alt="إطار موبايل"
                   className={styles.mobileImg}
+                  width={400}
+                  height={800}
+                  loading="lazy"
                 />
                 <div className={styles.mobileScreen}>
                   <div className={styles.scrollableContent}>
@@ -142,10 +148,14 @@ export default function SolutionsSection() {
                       rel="noopener noreferrer"
                       className={styles.projectLink}
                     >
-                      <img 
+                      <Image 
                         src={mobileProjects[mobileIndex].img} 
                         alt={mobileProjects[mobileIndex].title} 
-                        className={styles.projectImgMobile} 
+                        className={styles.projectImgMobile}
+                        width={400}
+                        height={700}
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, 50vw"
                       />
                     </a>
                   </div>
@@ -181,7 +191,7 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.tabletWrap} ${styles[`slide-${tabletDirection}`]}`} key={tabletIndex}>
-                <img src={cld("/digital-device-mockup.webp")} alt="إطار تابلت" className={styles.tabletImg} />
+                <Image src={cld("/digital-device-mockup.webp")} alt="إطار تابلت" className={styles.tabletImg} width={800} height={600} loading="lazy" />
                 <div className={styles.tabletScreen}>
                   <div className={styles.scrollableContent}>
                     <a 
@@ -190,10 +200,14 @@ export default function SolutionsSection() {
                       rel="noopener noreferrer"
                       className={styles.projectLink}
                     >
-                      <img 
+                      <Image 
                         src={tabletProjects[tabletIndex].img} 
                         alt={tabletProjects[tabletIndex].title} 
-                        className={styles.projectImgTablet} 
+                        className={styles.projectImgTablet}
+                        width={800}
+                        height={600}
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </a>
                   </div>

@@ -1,14 +1,12 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import styles from "./Hero.module.css";
+import { cld } from "@/lib/cloudinary";
 
 // Lazy load Spline with priority
 const SplineScene = dynamic(() => import("@/components/spline/SplineScene"), {
   ssr: false
 });
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
 
 interface HeroProps {
   title?: string;
@@ -17,7 +15,7 @@ interface HeroProps {
 export default function Hero({ title = "للبرمجيات والأعمال التقنية" }: HeroProps) {
   const heroSceneUrl = "https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode";
   
-  const SHOW_ROBOT = true;
+  const SHOW_ROBOT = false;
   
   const leftServices = [
     { icon: "fas fa-laptop-code", label: "حــلــول بــرمــجــيـــة", href: "#solutions" },
@@ -40,7 +38,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
   return (
     <section className={styles.heroSection}>
       <Image
-        src={cld("/robot-poster1.webp")}
+        src={cld("/robot-poster1.webp", 1920)}
         alt=""
         fill
         priority
@@ -76,7 +74,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
         <div className={styles.centerContent}>
           <a href="/" className={styles.logoWrapper}>
             <Image
-              src="/ثوابت-02.webp"
+              src={cld("/02.webp", 300)}
               alt="شعار دوام للأعمال التقنية"
               width={300}
               height={300}

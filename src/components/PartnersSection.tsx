@@ -105,6 +105,7 @@ export default function PartnersSection() {
                     src={logo} 
                     alt={`شريك ${index + 1}`}
                     className={styles.logoImage}
+                    loading="lazy"
                   />
                 </div>
               </div>

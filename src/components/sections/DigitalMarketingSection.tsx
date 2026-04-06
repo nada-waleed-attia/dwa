@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import styles from "./DigitalMarketingSection.module.css";
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+import { cld } from "@/lib/cloudinary";
 
 export default function DigitalMarketingSection() {
   return (
@@ -63,7 +61,7 @@ export default function DigitalMarketingSection() {
               <div className={styles.centralCore}>
                 <div className={styles.coreGlow}></div>
                 <Image
-                  src={cld("/Boost Your Business with Fiverr Pro.webp")}
+                  src={cld("/Boost_Your_Business_with_Fiverr_Pro.webp", 600)}
                   alt="Digital Marketing Core"
                   className={styles.coreImage}
                   width={500}

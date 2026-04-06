@@ -12,7 +12,7 @@ export default function DigitalTransformationSection() {
           loop
           muted
           playsInline
-          poster="/digital transformation.webp"
+          poster="/digital-transformation.webp"
         >
           <source src="/Digital-Transformation_2.webm" type="video/mp4" />
         </video>
@@ -31,7 +31,7 @@ export default function DigitalTransformationSection() {
         <div className={styles.featuredImageWrapper} data-aos="zoom-in">
           <div className={styles.imageFrame}>
             <img
-              src="/digital transformation.webp"
+              src="/digital-transformation.webp"
               alt="Digital Transformation"
               className={styles.featuredImg}
             />

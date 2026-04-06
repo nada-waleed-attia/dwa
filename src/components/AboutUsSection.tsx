@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import styles from "./AboutUsSection.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { cld } from "@/lib/cloudinary";
 
 export default function AboutUsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -32,20 +33,17 @@ export default function AboutUsSection() {
     };
   }, []);
 
-  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-  const cld = (path: string) => `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto/dwam-website${path}`;
-
   const logos = [
-    cld("/images.webp"),
-    "/20231126120517!وزارة_الاتصالات_وتكنولوجيا_المعلومات.webp",
-    cld("/logo.webp"),
-    cld("/Logo_of_smart_village.webp"),
-    cld("/logogfi.webp"),
-    cld("/files73982c50-f2c0-11ef-8e6d-8710050d69b7.webp"),
-    "/images (1).webp",
-    cld("/oss_logo.webp"),
-    "/هيئة_تنمية_صناعة_تكنولوجيا_المعلومات_(مصر).webp",
-    cld("/duns-registered.webp"),
+    cld("/images.webp", 120),
+    cld("/iti.webp", 120),
+    cld("/logo.webp", 120),
+    cld("/Logo_of_smart_village.webp", 120),
+    cld("/logogfi.webp", 120),
+    cld("/files73982c50-f2c0-11ef-8e6d-8710050d69b7.webp", 120),
+    cld("/images(1).webp", 120),
+    cld("/oss_logo.webp", 120),
+    cld("/itida.webp", 120),
+    cld("/duns-registered.webp", 120),
   ];
 
   return (
@@ -84,12 +82,13 @@ export default function AboutUsSection() {
           <div className={styles.imageContent}>
             <div className={styles.imageWrapper}>
               <Image 
-                src={cld("/diverse-team-it-engineering-experts-engaged-highlevel-meeting-about-digital-transformation-system-integration.webp")}
+                src={cld("/diverse-team-it-engineering-experts-engaged-highlevel-meeting-about-digital-transformation-system-integration.webp", 600)}
                 alt="فريق دوام للأعمال التقنية"
                 className={styles.mainImage}
                 width={600}
                 height={400}
                 loading="lazy"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className={styles.imageOverlay}></div>
             </div>

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import styles from "./TrainingCoursesSection.module.css";
 import dynamic from "next/dynamic";
+import { cld } from "@/lib/cloudinary";
 
 // Lazy load icons
 const FaGraduationCap = dynamic(() => import("react-icons/fa").then(mod => ({ default: mod.FaGraduationCap })), { ssr: false });
@@ -81,7 +82,7 @@ export default function TrainingCoursesSection() {
           {/* Right Side - Content */}
           <div className={styles.contentSection}>
             <div className={styles.logoWrapper}>
-              <img src="/دوام-اكاديمي.webp" alt="دوام أكاديمي" className={styles.logo} />
+              <img src={cld("/dwam-acadmy.webp", 200)} alt="دوام أكاديمي" className={styles.logo} />
             </div>
 
             <div className={styles.description}>

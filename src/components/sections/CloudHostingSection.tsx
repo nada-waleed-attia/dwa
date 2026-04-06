@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "./CloudHostingSection.module.css";
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+import { cld } from "@/lib/cloudinary";
 
 export default function CloudHostingSection() {
   // Progressive loading states
@@ -87,7 +85,7 @@ export default function CloudHostingSection() {
                 {/* Central Server Graphic/Icon instead of the old image for a cleaner look, or re-use the image in a circle */}
                 <div className={styles.pulseCircle}>
                   <img
-                    src={cld("/download (13).webp")}
+                    src={cld("/download_13.webp", 200)}
                     alt="Cloud Server"
                     className={styles.centerImage}
                   />

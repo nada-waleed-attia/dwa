@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "./ContentCreationSection.module.css";
-
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
-const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+import { cld } from "@/lib/cloudinary";
 
 export default function ContentCreationSection() {
   // Progressive loading states
@@ -99,7 +97,7 @@ export default function ContentCreationSection() {
         <div className={styles.right} data-aos="fade-up" data-aos-duration="1000">
           <div className={styles.hero}>
             <img
-              src={cld("/Transform Your Brand with Creative Content.webp")}
+              src={cld("/Transform_Your_Brand_with_Creative_Content.webp", 600)}
               alt="صناعة المحتوى"
               className={styles.heroImg}
               loading="lazy"
