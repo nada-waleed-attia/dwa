@@ -14,7 +14,7 @@ interface HeroProps {
 export default function Hero({ title = "للبرمجيات والأعمال التقنية" }: HeroProps) {
   const heroSceneUrl = "https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode";
   
-  const SHOW_ROBOT = false;
+  const SHOW_ROBOT = true;
   
   const leftServices = [
     { icon: "fas fa-laptop-code", label: "حــلــول بــرمــجــيـــة", href: "#solutions" },
@@ -37,7 +37,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
   return (
     <section className={styles.heroSection}>
       <Image
-        src="/robot-poster1.webp"
+        src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website/robot-poster1.webp`}
         alt=""
         fill
         priority
@@ -73,7 +73,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
         <div className={styles.centerContent}>
           <a href="/" className={styles.logoWrapper}>
             <Image
-              src="/ثوابت-02.webp"
+              src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website/ثوابت-02.webp`}
               alt="شعار دوام للأعمال التقنية"
               width={300}
               height={300}
