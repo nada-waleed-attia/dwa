@@ -5,7 +5,7 @@ import { cld } from "@/lib/cloudinary";
 
 // Lazy load Spline with priority
 const SplineScene = dynamic(() => import("@/components/spline/SplineScene"), {
-  ssr: false
+  ssr: true
 });
 
 interface HeroProps {
@@ -15,7 +15,7 @@ interface HeroProps {
 export default function Hero({ title = "للبرمجيات والأعمال التقنية" }: HeroProps) {
   const heroSceneUrl = "https://prod.spline.design/AZKtIJgbI3wnee-5/scene.splinecode";
   
-  const SHOW_ROBOT = false;
+  const SHOW_ROBOT = true;
   
   const leftServices = [
     { icon: "fas fa-laptop-code", label: "حــلــول بــرمــجــيـــة", href: "#solutions" },
@@ -48,7 +48,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
       />
       {/* Spline Robot 3D - يظهر فقط لو SHOW_ROBOT = true */}
       {SHOW_ROBOT && (
-        <div className={styles.heroSpline} aria-hidden="false">
+        <div className={styles.heroSpline} aria-hidden="true">
           <SplineScene scene={heroSceneUrl} />
         </div>
       )}
