@@ -1,5 +1,8 @@
 import styles from "./Footer.module.css";
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 export default function Footer() {
   return (
     <footer className={styles.footerSection}>
@@ -13,7 +16,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <img
-                  src="/dwam.webp"
+                  src={cld("/dwam.webp")}
                   alt="شعار دوام"
                   className={styles.brandLogo}
                 />
@@ -322,7 +325,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <img
-                  src="/dwam.webp"
+                  src={cld("/dwam.webp")}
                   alt="شعار دوام"
                   className={styles.copyrightLogo}
                 />

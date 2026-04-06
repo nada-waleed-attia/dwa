@@ -8,10 +8,14 @@ cloudinary.config({
 });
 
 async function check() {
-  // List subfolders inside dwam-website
-  const result = await cloudinary.api.sub_folders('dwam-website');
-  console.log('\n📁 Subfolders inside dwam-website:');
-  result.folders.forEach(f => console.log(' -', f.name, '→', f.path));
+  // List all files in root of dwam-website (no subfolders)
+  const result = await cloudinary.api.resources({
+    type: 'upload',
+    prefix: 'dwam-website/',
+    max_results: 50,
+  });
+  console.log('\n📁 Files in dwam-website root:');
+  result.resources.forEach((r) => console.log(' -', r.public_id));
 }
 
 check().catch(console.error);

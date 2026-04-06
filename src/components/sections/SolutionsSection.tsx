@@ -2,6 +2,9 @@
 import { useState } from "react";
 import styles from "./SolutionsSection.module.css";
 
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 export default function SolutionsSection() {
   const [laptopIndex, setLaptopIndex] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -12,27 +15,23 @@ export default function SolutionsSection() {
   const [tabletDirection, setTabletDirection] = useState<'left' | 'right'>('right');
 
   const laptopProjects = [
-    { img: "/binqasim.sa.webp", title: "وقف   بن القاسم ", url: "https://binqasim.sa/" },
-    { img: "/www.ofuq.academy.webp", title: "منصة أفق التعليمية", url: "https://www.ofuq.academy/" },
-    { img: "/madarek.webp", title: "مجلة مدارك", url: "https://mdarek.net/" },
-    { img: "/asmaa-allah.webp", title: " الله أنيس المحبين", url: "http://allah-names.com" },
-    { img: "/makkah.webp", title: "معالم مكة السياحية", url: "http://touristmecca.sa" },
+    { img: cld("/binqasim.sa.webp"), title: "وقف   بن القاسم ", url: "https://binqasim.sa/" },
+    { img: cld("/www.ofuq.academy.webp"), title: "منصة أفق التعليمية", url: "https://www.ofuq.academy/" },
+    { img: cld("/madarek.webp"), title: "مجلة مدارك", url: "https://mdarek.net/" },
+    { img: cld("/asmaa-allah.webp"), title: " الله أنيس المحبين", url: "http://allah-names.com" },
+    { img: cld("/makkah.webp"), title: "معالم مكة السياحية", url: "http://touristmecca.sa" },
   ];
 
   const mobileProjects = [
-    { img: "/nasmaser.webp", title: "تطبيق ناس مصر", url: "https://play.google.com/store/apps/details?id=com.nasmasr.app" },
-    { img: "/joly.webp", title: "تطبيق جولي تاكسي", url: "" },
-    { img: "/dubi.webp", title: "DubiSale App", url: "" },
-    // { img: "/asmaa-allah.webp", title: "أسماء الله الحسنى", url: "http://allah-names.com" },
-    // { img: "/brand.webp", title: "Brand Store", url: "http://brandstore-eg.com" },
+    { img: cld("/nasmaser.webp"), title: "تطبيق ناس مصر", url: "https://play.google.com/store/apps/details?id=com.nasmasr.app" },
+    { img: cld("/joly.webp"), title: "تطبيق جولي تاكسي", url: "" },
+    { img: cld("/dubi.webp"), title: "DubiSale App", url: "" },
   ];
 
   const tabletProjects = [
-   // { img: "/www.brandstore-eg.com.webp", title: "Brand Store", url: "https://www.brandstore-eg.com/" },
-    { img: "/dewalls.webp", title: "Dewalls Decorations", url: "http://dewalls.sa" },
-    { img: "/kittaan.com.webp", title: "Kitaan Boutique", url: "https://kittaan.com/" },
-    { img: "/kittanhome.com.webp", title: "Kittan Home", url: "https://kittanhome.com/" },
-    // { img: "/asmaa-allah.webp", title: "أسماء الله الحسنى", url: "http://allah-names.com" },
+    { img: cld("/dewalls.webp"), title: "Dewalls Decorations", url: "http://dewalls.sa" },
+    { img: cld("/kittaan.com.webp"), title: "Kitaan Boutique", url: "https://kittaan.com/" },
+    { img: cld("/kittanhome.com.webp"), title: "Kittan Home", url: "https://kittanhome.com/" },
   ];
 
   const nextLaptop = () => {
@@ -65,10 +64,10 @@ export default function SolutionsSection() {
   return (
     <section id="solutions" className={styles.wrap}>
       <div className={styles.floatingIcons} aria-hidden="true">
-        <img src="/icons8-source-code-48.webp" alt="" className={`${styles.floatIcon} ${styles.i1}`} />
-        <img src="/ui-ux-icon.webp" alt="" className={`${styles.floatIcon} ${styles.i2}`} />
-        <img src="/auth-icon.webp" alt="" className={`${styles.floatIcon} ${styles.i3}`} />
-        <img src="/icons8-settings-64.webp" alt="" className={`${styles.floatIcon} ${styles.i4}`} />
+        <img src={cld("/icons8-source-code-48.webp")} alt="" className={`${styles.floatIcon} ${styles.i1}`} />
+        <img src={cld("/ui-ux-icon.webp")} alt="" className={`${styles.floatIcon} ${styles.i2}`} />
+        <img src={cld("/auth-icon.webp")} alt="" className={`${styles.floatIcon} ${styles.i3}`} />
+        <img src={cld("/icons8-settings-64.webp")} alt="" className={`${styles.floatIcon} ${styles.i4}`} />
       </div>
       <div className={styles.inner}>
         <h2 className={styles.title}>حلول برمجية</h2>
@@ -82,7 +81,7 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.laptopWrap} ${styles[`slide-${laptopDirection}`]}`} key={laptopIndex}>
-                <img src="/laptop-frame.webp" alt="إطار لابتوب" className={styles.laptopImg} />
+                <img src={cld("/laptop-frame.webp")} alt="إطار لابتوب" className={styles.laptopImg} />
                 <div className={styles.screen}>
                   <div className={styles.scrollableContent}>
                     <a 
@@ -131,7 +130,7 @@ export default function SolutionsSection() {
               </button>
               <div className={`${styles.mobileWrap} ${styles[`slide-${mobileDirection}`]}`} key={mobileIndex}>
                 <img
-                  src="/realistic-front-view-smartphone-mockup-mobile-iphone-purple-frame-with-blank-white-display-vector.webp"
+                  src={cld("/realistic-front-view-smartphone-mockup-mobile-iphone-purple-frame-with-blank-white-display-vector.webp")}
                   alt="إطار موبايل"
                   className={styles.mobileImg}
                 />
@@ -182,7 +181,7 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.tabletWrap} ${styles[`slide-${tabletDirection}`]}`} key={tabletIndex}>
-                <img src="/digital-device-mockup.webp" alt="إطار تابلت" className={styles.tabletImg} />
+                <img src={cld("/digital-device-mockup.webp")} alt="إطار تابلت" className={styles.tabletImg} />
                 <div className={styles.tabletScreen}>
                   <div className={styles.scrollableContent}>
                     <a 

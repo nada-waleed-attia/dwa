@@ -4,6 +4,9 @@ import Image from "next/image";
 import styles from "./AISection.module.css";
 import { useState, useEffect } from "react";
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 export default function AISection() {
   // ============================================
   // Progressive Loading داخل الـ Section
@@ -121,7 +124,7 @@ export default function AISection() {
                 <div className={styles.showcase} data-aos="fade-left" data-aos-duration="1200">
                   <div className={styles.mainImage}>
                     <Image
-                      src="/AIs.webp"
+                      src={cld("/AIs.webp")}
                       alt="رسم توضيحي لعقل بشري متصل بدوائر إلكترونية يمثل الذكاء الاصطناعي"
                       width={600}
                       height={600}

@@ -1,5 +1,9 @@
 "use client";
 import styles from "./DwamProductsSection.module.css";
+
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 import { 
   FaHandsHelping, 
   FaMosque, 
@@ -62,7 +66,7 @@ export default function DwamProductsSection() {
           {/* Left Side - Image */}
           <div className={styles.leftSection}>
             <div className={styles.showcaseImage}>
-              <img src="/ai-nuclear-energy-background-future-innovation-disruptive-technology.webp" alt="منتجات دوام" />
+              <img src={cld("/ai-nuclear-energy-background-future-innovation-disruptive-technology.webp")} alt="منتجات دوام" />
               <div className={styles.imageOverlay}></div>
             </div>
           </div>

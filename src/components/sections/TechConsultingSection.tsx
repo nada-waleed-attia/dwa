@@ -1,5 +1,8 @@
 import styles from "./TechConsultingSection.module.css";
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 export default function TechConsultingSection() {
   return (
     <section id="tech-consulting" className={styles.section}>
@@ -42,7 +45,7 @@ export default function TechConsultingSection() {
           <div className={styles.imageCard} data-aos="fade-right" data-aos-delay="100">
             <div className={styles.imageWrapper}>
               <img
-                src="/1.webp"
+                src={cld("/1.webp")}
                 alt="استشارات تقنية"
                 className={styles.image}
               />
@@ -103,7 +106,7 @@ export default function TechConsultingSection() {
           <div className={styles.imageCard} data-aos="fade-left" data-aos-delay="100">
             <div className={styles.imageWrapper}>
               <img
-                src="/Can digital stock set off new revolution in the capital market_.webp"
+                src={cld("/Can digital stock set off new revolution in the capital market_.webp")}
                 alt="الثورة الرقمية"
                 className={styles.image}
               />

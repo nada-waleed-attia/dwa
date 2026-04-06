@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./GraphicDesignSection.module.css";
 import LazyIframe from "@/components/LazyIframe";
+import { getGallery, GalleryImage } from "@/lib/gallery";
 
 // Lazy load icons only when needed
 import dynamic from "next/dynamic";
@@ -16,14 +17,26 @@ type PdfItem = {
   file: string;
 };
 
-const buildImageRange = (base: string, start: number, end: number, ext = "webp") =>
-  Array.from({ length: end - start + 1 }, (_, i) => `${base}/${start + i}.${ext}`);
+// Cloudinary folder mapping
+const CLOUDINARY_FOLDERS: Record<string, string> = {
+  social: 'socialmedia',
+  banners: 'banners',
+  flyers: 'flyers',
+  books: '3d',
+};
+
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
 
 export default function GraphicDesignSection() {
   // Progressive loading states
-  const [layer2Loaded, setLayer2Loaded] = useState(false); // Tiles
-  const [layer3Loaded, setLayer3Loaded] = useState(false); // CTA + Arrow
+  const [layer2Loaded, setLayer2Loaded] = useState(false);
+  const [layer3Loaded, setLayer3Loaded] = useState(false);
   
+  // Cloudinary gallery state
+  const [cloudinaryImages, setCloudinaryImages] = useState<Record<string, string[]>>({});
+  const [loadingGallery, setLoadingGallery] = useState(false);
+
   const galleries = useMemo(
     () => ({
       identity: [
@@ -33,33 +46,24 @@ export default function GraphicDesignSection() {
         { title: "هوية جمعية المعالم السياحية بمكة المكرمة", file: "/Full_identity/4.pdf" },
         { title: "هوية وقف الصالح الخيري", file: "/Full_identity/5.pdf" },
       ] as PdfItem[],
-      social: [
-        ...buildImageRange("/socialmedia", 55, 108),
-        ...buildImageRange("/Da'wah_reports", 1, 54),
-      ] as string[],
+      social: [] as string[],
       brochure: [
-        { title: "بروشور تعريفي للشركة", file: "/brushor&reports/9.pdf" },
-        { title: "بروفايل الخدمات", file: "/brushor&reports/10.pdf" },
-        { title: "دليل الهوية البصرية", file: "/brushor&reports/11.pdf" },
-        { title: "عرض الأعمال المختصر", file: "/brushor&reports/12.pdf" },
-        { title: "بروشور الحلول الرقمية", file: "/brushor&reports/13.pdf" },
-        { title: "ملف باقات الخدمات", file: "/brushor&reports/14.pdf" },
-        { title: "كتيب المشاريع المنفذة", file: "/brushor&reports/15.pdf" },
-        { title: "ملف أعمال السوشيال ميديا", file: "/brushor&reports/16.pdf" },
-        { title: "عرض الحملات التسويقية", file: "/brushor&reports/17.pdf" },
-        { title: "دليل التواصل والاتصال", file: "/brushor&reports/18.pdf" },
-        { title: "بروشور الشراكات والنجاحات", file: "/brushor&reports/19.pdf" },
+        { title: "بروشور تعريفي للشركة", file: "/brushor-reports/9.pdf" },
+        { title: "بروفايل الخدمات", file: "/brushor-reports/10.pdf" },
+        { title: "دليل الهوية البصرية", file: "/brushor-reports/11.pdf" },
+        { title: "عرض الأعمال المختصر", file: "/brushor-reports/12.pdf" },
+        { title: "بروشور الحلول الرقمية", file: "/brushor-reports/13.pdf" },
+        { title: "ملف باقات الخدمات", file: "/brushor-reports/14.pdf" },
+        { title: "كتيب المشاريع المنفذة", file: "/brushor-reports/15.pdf" },
+        { title: "ملف أعمال السوشيال ميديا", file: "/brushor-reports/16.pdf" },
+        { title: "عرض الحملات التسويقية", file: "/brushor-reports/17.pdf" },
+        { title: "دليل التواصل والاتصال", file: "/brushor-reports/18.pdf" },
+        { title: "بروشور الشراكات والنجاحات", file: "/brushor-reports/19.pdf" },
       ] as PdfItem[],
       reports: [] as string[],
-      banners: buildImageRange("/banners", 1, 25),
-      flyers: [
-        ...buildImageRange("/brushor&reports", 1, 8),
-        ...buildImageRange("/flyers", 1, 26),
-      ] as string[],
-      books: [
-        "/3d/EDGE HIG.webp",
-        ...Array.from({ length: 9 }, (_, i) => `/3d/EDGE HIG-0${i + 1}.webp`),
-      ] as string[],
+      banners: [] as string[],
+      flyers: [] as string[],
+      books: [] as string[],
       logoAnimation: "PLKB9gdK4mtM0yLslxgOCPMPmEB5GvUUMm",
     }),
     []
@@ -112,12 +116,12 @@ export default function GraphicDesignSection() {
     };
   }, []);
   
-  // Device preview slides - عينة من الصور
+  // Device preview slides - من Cloudinary لو موجودة
   const socialSlides = useMemo(() => {
-    const social = galleries.social as string[];
-    // خد أول 10 صور بس للعرض في الـ device
-    return social.slice(0, 10);
-  }, [galleries.social]);
+    const cloudSocial = cloudinaryImages['social'] || [];
+    if (cloudSocial.length > 0) return cloudSocial.slice(0, 10);
+    return [];
+  }, [cloudinaryImages]);
   
   // Animate device preview
   useEffect(() => {
@@ -134,7 +138,11 @@ export default function GraphicDesignSection() {
   const isLogoAnimationView = activeKey === "logoAnimation";
 
   const isPDFView = isIdentityView || isBrochureReportsView;
-  const allImages = isPDFView || isLogoAnimationView ? [] : (currentData as string[]);
+  
+  // استخدم الصور من Cloudinary لو موجودة، غير كده استخدم الـ static array
+  const staticImages = isPDFView || isLogoAnimationView ? [] : (currentData as string[]);
+  const cloudImages = activeKey ? (cloudinaryImages[activeKey as string] || []) : [];
+  const allImages = cloudImages.length > 0 ? cloudImages : staticImages;
   
   // حساب الصور للصفحة الحالية
   const totalPages = Math.ceil(allImages.length / IMAGES_PER_PAGE);
@@ -218,13 +226,30 @@ export default function GraphicDesignSection() {
     return () => { document.body.style.overflow = ""; };
   }, []);
 
-  const open = (key: keyof typeof galleries) => {
+  const open = async (key: keyof typeof galleries) => {
     setActiveKey(key);
     setIndex(0);
     setAutoPlay(true);
     setModalMounted(true);
-    setCurrentPage(0); // Reset to first page
+    setCurrentPage(0);
     document.body.style.overflow = "hidden";
+
+    // جلب الصور من Cloudinary لو الـ key عنده folder
+    const folder = CLOUDINARY_FOLDERS[key as string];
+    if (folder && !cloudinaryImages[key as string]) {
+      setLoadingGallery(true);
+      try {
+        const images = await getGallery(folder);
+        setCloudinaryImages(prev => ({
+          ...prev,
+          [key]: images.map((img: GalleryImage) => img.secureUrl)
+        }));
+      } catch (err) {
+        console.error('Failed to load gallery:', err);
+      } finally {
+        setLoadingGallery(false);
+      }
+    }
   };
 
   const close = () => {
@@ -272,37 +297,37 @@ export default function GraphicDesignSection() {
             {layer2Loaded && (
               <div className={styles.tiles}>
               <button type="button" className={`${styles.tile} ${styles.t1}`} onClick={() => open("identity")}>
-                <Image src="/icons/icon1.webp" alt={"تصميم الهوية"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon1.webp")} alt={"تصميم الهوية"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تصميم الهوية الكاملة"}</h3>
                 <p className={styles.tileText}>{"بناء هوية متكاملة وشخصية قوية للعلامة."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t2}`} onClick={() => open("social")}>
-                <Image src="/share_12550121.webp" alt={"سوشيال ميديا"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/share_12550121.webp")} alt={"سوشيال ميديا"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تصميمات السوشيال ميديا"}</h3>
                 <p className={styles.tileText}>{"قوالب ومحتوى بصري جذاب يعزز التفاعل."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t3}`} onClick={() => open("brochure")}>
-                <Image src="/icons/icon3.webp" alt={"تقارير وبروشورات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon3.webp")} alt={"تقارير وبروشورات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"تقارير وبروشورات"}</h3>
                 <p className={styles.tileText}>{"إخراج احترافي للمطبوعات المؤسسية."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t4}`} onClick={() => open("banners")}>
-                <Image src="/icons/icon4.webp" alt={"لافتات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon4.webp")} alt={"لافتات"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"لافتات وإعلانات"}</h3>
                 <p className={styles.tileText}>{"تصميم لافتات عالية الوضوح والأثر."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t5}`} onClick={() => open("flyers")}>
-                <Image src="/icons/icon5.webp" alt={"فلايرز"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/icons/icon5.webp")} alt={"فلايرز"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"فلايرز احترافية"}</h3>
                 <p className={styles.tileText}>{"مواد ترويجية مختصرة ومباشرة."}</p>
               </button>
 
               <button type="button" className={`${styles.tile} ${styles.t6}`} onClick={() => open("books")}>
-                <Image src="/book_5463282.webp" alt={"أغلفة كتب"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
+                <Image src={cld("/book_5463282.webp")} alt={"أغلفة كتب"} className={styles.tileIcon} width={80} height={80} loading="lazy" />
                 <h3 className={styles.tileTitle}>{"أغلفة كتب"}</h3>
                 <p className={styles.tileText}>{"أغلفة بصرية ملهمة ومعبرة عن المحتوى."}</p>
               </button>
@@ -366,7 +391,9 @@ export default function GraphicDesignSection() {
 
             <div className={styles.modalContent}>
               {!isPDFView && !isLogoAnimationView && images.length === 0 ? (
-                <div className={styles.emptyNotice}>{"لا توجد أعمال لعرضها الآن"}</div>
+                <div className={styles.emptyNotice}>
+                  {loadingGallery ? "جاري تحميل الصور..." : "لا توجد أعمال لعرضها الآن"}
+                </div>
               ) : isLogoAnimationView ? (
                 <div className={styles.youtubePlaylistWrap}>
                   <LazyIframe

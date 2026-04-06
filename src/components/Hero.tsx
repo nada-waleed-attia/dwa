@@ -7,6 +7,9 @@ const SplineScene = dynamic(() => import("@/components/spline/SplineScene"), {
   ssr: false
 });
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 interface HeroProps {
   title?: string;
 }
@@ -37,7 +40,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
   return (
     <section className={styles.heroSection}>
       <Image
-        src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website/robot-poster1.webp`}
+        src={cld("/robot-poster1.webp")}
         alt=""
         fill
         priority
@@ -73,7 +76,7 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
         <div className={styles.centerContent}>
           <a href="/" className={styles.logoWrapper}>
             <Image
-              src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website/ثوابت-02.webp`}
+              src="/ثوابت-02.webp"
               alt="شعار دوام للأعمال التقنية"
               width={300}
               height={300}

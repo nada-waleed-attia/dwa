@@ -32,17 +32,20 @@ export default function AboutUsSection() {
     };
   }, []);
 
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+  const cld = (path: string) => `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
   const logos = [
-    "/images.webp",
+    cld("/images.webp"),
     "/20231126120517!وزارة_الاتصالات_وتكنولوجيا_المعلومات.webp",
-    "/logo.webp",
-    "/Logo_of_smart_village.webp",
-    "/logogfi.webp",
-    "/files73982c50-f2c0-11ef-8e6d-8710050d69b7.webp",
+    cld("/logo.webp"),
+    cld("/Logo_of_smart_village.webp"),
+    cld("/logogfi.webp"),
+    cld("/files73982c50-f2c0-11ef-8e6d-8710050d69b7.webp"),
     "/images (1).webp",
-    "/oss_logo.webp",
+    cld("/oss_logo.webp"),
     "/هيئة_تنمية_صناعة_تكنولوجيا_المعلومات_(مصر).webp",
-    "/duns-registered.webp",
+    cld("/duns-registered.webp"),
   ];
 
   return (
@@ -81,7 +84,7 @@ export default function AboutUsSection() {
           <div className={styles.imageContent}>
             <div className={styles.imageWrapper}>
               <Image 
-                src="/diverse-team-it-engineering-experts-engaged-highlevel-meeting-about-digital-transformation-system-integration.webp" 
+                src={cld("/diverse-team-it-engineering-experts-engaged-highlevel-meeting-about-digital-transformation-system-integration.webp")}
                 alt="فريق دوام للأعمال التقنية"
                 className={styles.mainImage}
                 width={600}

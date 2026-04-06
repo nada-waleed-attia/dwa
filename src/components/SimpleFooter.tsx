@@ -1,5 +1,8 @@
 import styles from "./SimpleFooter.module.css";
 
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dgolhybek';
+const cld = (path: string) => `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/q_auto,f_auto/dwam-website${path}`;
+
 export default function SimpleFooter() {
   return (
     <footer className={styles.footer}>
@@ -13,7 +16,7 @@ export default function SimpleFooter() {
             <span className={styles.text}>لشركة</span>
             <a href="/" className={styles.logoLink}>
               <img 
-                src="/ثوابت-02.webp" 
+                src="/ثوابت-02.webp"
                 alt="دوام" 
                 className={styles.logo}
               />
