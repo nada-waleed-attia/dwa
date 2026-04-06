@@ -127,6 +127,7 @@ export default function AISection() {
                       width={600}
                       height={600}
                       loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className={styles.mainImg}
                     />
                   </div>

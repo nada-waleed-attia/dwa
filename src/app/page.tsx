@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import styles from "./page.module.css";
 import Hero from "@/components/Hero";
 import dynamic from "next/dynamic";
+import { useSectionLoadQueue } from "@/hooks/useSectionLoadQueue";
 
 // ============================================
 // LAYER 1: Critical - First Viewport (SSR)
@@ -19,15 +20,15 @@ import InquiryBanner from "@/components/InquiryBanner";
 // تحميل مبكر بدون SSR لكن مع preload
 const GraphicDesignSection = dynamic(() => import("@/components/sections/GraphicDesignSection"), { 
   ssr: false,
-  loading: () => <SectionSkeleton />
+  loading: () => <GallerySkeleton />
 });
 const MultimediaSection = dynamic(() => import("@/components/sections/MultimediaSection"), { 
   ssr: false,
-  loading: () => <SectionSkeleton />
+  loading: () => <TitleImageSkeleton />
 });
 const AISection = dynamic(() => import("@/components/sections/AISection"), { 
   ssr: false,
-  loading: () => <SectionSkeleton />
+  loading: () => <TitleImageSkeleton />
 });
 
 // ============================================
@@ -57,8 +58,14 @@ const SimpleFooter = dynamic(() => import("@/components/SimpleFooter"), { ssr: f
 
 // Import the optimized LazyWrapper
 import LazyWrapper from "@/components/LazyWrapper";
+import {
+  GallerySkeleton,
+  TitleImageSkeleton,
+  CardsSkeleton,
+  GenericSkeleton,
+} from "@/components/skeletons/SectionSkeletons";
 
-// Skeleton Loader Component
+// Skeleton Loader Component (generic fallback)
 function SectionSkeleton() {
   return (
     <div className={styles.sectionSkeleton}>
@@ -71,7 +78,33 @@ function SectionSkeleton() {
   );
 }
 
+// Sections configuration for Queue Manager
+const sectionsConfig = [
+  { id: 'hero', priority: 1, heavy: false },
+  { id: 'about', priority: 1, heavy: false },
+  { id: 'solutions', priority: 1, heavy: false },
+  { id: 'graphic-design', priority: 2, heavy: true },
+  { id: 'multimedia', priority: 2, heavy: true },
+  { id: 'ai', priority: 2, heavy: false },
+  { id: 'content-creation', priority: 3, heavy: false },
+  { id: 'cloud-hosting', priority: 3, heavy: false },
+  { id: 'digital-marketing', priority: 3, heavy: false },
+  { id: 'edtech', priority: 3, heavy: false },
+  { id: 'tech-consulting', priority: 3, heavy: false },
+  { id: 'training-courses', priority: 3, heavy: false },
+  { id: 'dwam-products', priority: 4, heavy: false },
+  { id: 'dwam-store', priority: 4, heavy: false },
+  { id: 'partners', priority: 4, heavy: false },
+  { id: 'location', priority: 5, heavy: false },
+  { id: 'contact', priority: 5, heavy: false },
+  { id: 'social-media', priority: 5, heavy: false },
+  { id: 'cta', priority: 5, heavy: false },
+  { id: 'footer', priority: 5, heavy: false },
+];
+
 export default function Home() {
+  const { queueSection } = useSectionLoadQueue(sectionsConfig);
+
   return (
     <div className={styles.app}>
       {/* ============================================ */}

@@ -78,7 +78,8 @@ export default function Hero({ title = "للبرمجيات والأعمال ال
               alt="شعار دوام للأعمال التقنية"
               width={300}
               height={300}
-              priority={true}
+              loading="lazy"
+              sizes="300px"
               className={styles.logo}
             />
           </a>

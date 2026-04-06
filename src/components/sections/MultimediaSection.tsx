@@ -161,7 +161,7 @@ export default function MultimediaSection() {
                   src={playlists[flipIndex % playlists.length].thumbnailUrl!}
                   alt="preview"
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, 300px"
                   loading="lazy"
                   draggable={false}
                   onError={(e) => {

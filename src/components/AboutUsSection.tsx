@@ -107,6 +107,7 @@ export default function AboutUsSection() {
                   width={120}
                   height={60}
                   loading="lazy"
+                  sizes="120px"
                 />
               </div>
             ))}

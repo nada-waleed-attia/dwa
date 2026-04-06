@@ -63,10 +63,10 @@ export default function SolutionsSection() {
   return (
     <section id="solutions" className={styles.wrap}>
       <div className={styles.floatingIcons} aria-hidden="true">
-        <Image src={cld("/icons8-source-code-48.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i1}`} width={48} height={48} loading="lazy" />
-        <Image src={cld("/ui-ux-icon.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i2}`} width={48} height={48} loading="lazy" />
-        <Image src={cld("/auth-icon.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i3}`} width={48} height={48} loading="lazy" />
-        <Image src={cld("/icons8-settings-64.webp", 64)} alt="" className={`${styles.floatIcon} ${styles.i4}`} width={64} height={64} loading="lazy" />
+        <Image src={cld("/icons8-source-code-48.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i1}`} width={48} height={48} loading="lazy" sizes="48px" />
+        <Image src={cld("/ui-ux-icon.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i2}`} width={48} height={48} loading="lazy" sizes="48px" />
+        <Image src={cld("/auth-icon.webp", 48)} alt="" className={`${styles.floatIcon} ${styles.i3}`} width={48} height={48} loading="lazy" sizes="48px" />
+        <Image src={cld("/icons8-settings-64.webp", 64)} alt="" className={`${styles.floatIcon} ${styles.i4}`} width={64} height={64} loading="lazy" sizes="64px" />
       </div>
       <div className={styles.inner}>
         <h2 className={styles.title}>حلول برمجية</h2>
@@ -80,7 +80,7 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.laptopWrap} ${styles[`slide-${laptopDirection}`]}`} key={laptopIndex}>
-                <Image src={cld("/laptop-frame.webp")} alt="إطار لابتوب" className={styles.laptopImg} width={800} height={500} loading="lazy" />
+                <Image src={cld("/laptop-frame.webp")} alt="إطار لابتوب" className={styles.laptopImg} width={800} height={500} loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                 <div className={styles.screen}>
                   <div className={styles.scrollableContent}>
                     <a 
@@ -96,7 +96,7 @@ export default function SolutionsSection() {
                         width={800}
                         height={500}
                         loading="lazy"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </a>
                   </div>
@@ -139,6 +139,7 @@ export default function SolutionsSection() {
                   width={400}
                   height={800}
                   loading="lazy"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
                 <div className={styles.mobileScreen}>
                   <div className={styles.scrollableContent}>
@@ -155,7 +156,7 @@ export default function SolutionsSection() {
                         width={400}
                         height={700}
                         loading="lazy"
-                        sizes="(max-width: 640px) 100vw, 50vw"
+                        sizes="(max-width: 768px) 50vw, 25vw"
                       />
                     </a>
                   </div>
@@ -191,7 +192,7 @@ export default function SolutionsSection() {
                 ›
               </button>
               <div className={`${styles.tabletWrap} ${styles[`slide-${tabletDirection}`]}`} key={tabletIndex}>
-                <Image src={cld("/digital-device-mockup.webp")} alt="إطار تابلت" className={styles.tabletImg} width={800} height={600} loading="lazy" />
+                <Image src={cld("/digital-device-mockup.webp")} alt="إطار تابلت" className={styles.tabletImg} width={800} height={600} loading="lazy" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                 <div className={styles.tabletScreen}>
                   <div className={styles.scrollableContent}>
                     <a 
@@ -207,7 +208,7 @@ export default function SolutionsSection() {
                         width={800}
                         height={600}
                         loading="lazy"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </a>
                   </div>
